@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="nn.css" type="text/css" media="all" />
+  <title>find search</title>
+</head>
+<style>
+  /* === Reset and Base Styles === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to right, #f8f9fa, #e0eafc);
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* === Input Field === */
+#searchInput {
+  width: 100%;
+  max-width: 400px;
+  padding: 14px 16px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  outline: none;
+  transition: 0.3s;
+  margin-bottom: 20px;
+}
+
+#searchInput:focus {
+  border-color: #007bff;
+  background-color: #eef6ff;
+}
+
+/* === Button Styling === */
+.button {
+  padding: 12px 24px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-bottom: 30px;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+/* === Loading Spinner === */
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #007bff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* === Results List === */
+#resultsList {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  max-width: 500px;
+}
+
+#resultsList li {
+  background-color: white;
+  margin-bottom: 12px;
+  padding: 18px 22px;
+  border-left: 6px solid #007bff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 18px;
+  color: #333;
+  transition: 0.2s;
+}
+
+#resultsList li:hover {
+  background-color: #f0f8ff;
+  transform: scale(1.01);
+}
+
+/* === Responsive Design === */
+@media (max-width: 600px) {
+  #searchInput,
+  .button,
+  #resultsList {
+    width: 90%;
+  }
+
+  #resultsList li {
+    font-size: 16px;
+    padding: 14px 18px;
+  }
+}
+#count{
+  font-size: 20px;
+  float: right;
+  margin-left: 13em;
+  padding: 10px;
+  background: whitesmoke;
+  box-shadow: 2px 2px 5px #55576E96;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+</style>
+
+<body>
+  <br>
+
+  <input type="text" id="searchInput" placeholder="enter fruits name..."/>
+  </br>
+  
+  <button class="button" onclick="handleSearch()">submit</button>
+  <p id="count"> All</p>
+<div id="loading" class="spinner" style="display: none;" ></div>
+  
+  <ul id="resultsList"></ul>
+  <script>
+  var countbox =document.getElementById("count");
+   const data = [
+  { name: "apple", color: "red", origin: "USA" },
+  { name: "banana", color: "yellow", origin: "Ecuador" },
+  { name: "orange", color: "orange", origin: "Spain" },
+  { name: "grapes", color: "purple", origin: "Italy" },
+  { name: "mango", color: "orange", origin: "India" },
+  { name: "pineapple", color: "brown", origin: "Philippines" }
+];
+var count =0;
+
+    function search(keyword){
+      const lowerKeyword = keyword.toLowerCase();
+      const result = data.filter(item => 
+      item.name.includes(lowerKeyword)|| 
+      item.color.includes(lowerKeyword)|| 
+      item.origin.includes(lowerKeyword));
+      
+      const resultsList = document.getElementById("resultsList"); 
+      
+      
+      
+      resultsList.innerHTML= "";
+      if (result.length >0){
+        result.forEach((item)=> {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} -     COLOR:  ${item.color} ,ORIGIN:  ${item.origin}`;
+       
+        resultsList.appendChild(li);
+        count += 1;
+        });
+            // Update search count.
+    
+   countbox.textContent = `${count}`;
+
+      }
+      else
+     count =0;
+      countbox.innerHTML = `<p>${count}</p>`;
+
+      
+      
+      
+      
+    }
+    
+    // This block of code for show all data if there is nothing.
+    const resultsList = document.getElementById("resultsList");
+    resultsList.innerHTML= "";
+    data.forEach((item)=> {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} -     COLOR:  ${item.color} ,ORIGIN:  ${item.origin}`;
+       
+        resultsList.appendChild(li);
+        
+        });
+        
+      
+
+ 
+    
+    function handleSearch(){
+      const keyword = document.getElementById("searchInput").value;
+      document.getElementById("loading").style.display = "block";
+      
+      setTimeout(() => {
+        search(keyword);
+      document.getElementById("loading").style.display="none";
+      
+      },500);
+      
+      
+    }
+  </script>
+  
+  
+</body>
+
+</html>
